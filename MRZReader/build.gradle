@@ -39,6 +39,7 @@ android {
         disable 'InvalidPackage'
         textReport true
         textOutput 'stdout'
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11

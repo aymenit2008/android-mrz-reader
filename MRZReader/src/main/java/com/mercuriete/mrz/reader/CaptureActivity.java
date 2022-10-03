@@ -92,7 +92,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     /**
      * ISO 639-1 language code indicating the default target language for translation.
      */
-    public static final String DEFAULT_TARGET_LANGUAGE_CODE = "es";
+    public static final String DEFAULT_TARGET_LANGUAGE_CODE = "ar";
 
     /**
      * The default online machine translation service to use.
@@ -102,12 +102,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     /**
      * The default OCR engine to use.
      */
+    //public static final String DEFAULT_OCR_ENGINE_MODE = "Tesseract";
     public static final String DEFAULT_OCR_ENGINE_MODE = "Tesseract";
 
     /**
      * The default page segmentation mode to use.
      */
     public static final String DEFAULT_PAGE_SEGMENTATION_MODE = "Auto";
+    //public static final String DEFAULT_PAGE_SEGMENTATION_MODE = "Vertical block";
 
     /**
      * Whether to use autofocus by default.
@@ -117,12 +119,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     /**
      * Whether to initially disable continuous-picture and continuous-video focus modes.
      */
-    public static final boolean DEFAULT_DISABLE_CONTINUOUS_FOCUS = false;
+    public static final boolean DEFAULT_DISABLE_CONTINUOUS_FOCUS = true;
 
     /**
      * Whether to beep by default when the shutter button is pressed.
      */
-    public static final boolean DEFAULT_TOGGLE_BEEP = false;
+    public static final boolean DEFAULT_TOGGLE_BEEP = true;
 
     /**
      * Whether to initially show a looping, real-time OCR display.
@@ -137,12 +139,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     /**
      * Whether to enable the use of online translation services be default.
      */
-    public static final boolean DEFAULT_TOGGLE_TRANSLATION = true;
+    public static final boolean DEFAULT_TOGGLE_TRANSLATION = false;
 
     /**
      * Whether the light should be initially activated by default.
      */
-    public static final boolean DEFAULT_TOGGLE_LIGHT = true;
+    public static final boolean DEFAULT_TOGGLE_LIGHT = false;
 
 
     /**
@@ -473,6 +475,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         handler.stop();
         if (lastResult != null) {
             handleOcrDecode(lastResult);
+            //handleOcrContinuousDecode(lastResult);
         } else {
             Toast toast = Toast.makeText(this, "OCR failed. Please try again.", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.TOP, 0, 0);
@@ -818,9 +821,16 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                 }
             }
             ocrResult.setText(result);
+
             if (ocrResult.getMeanConfidence() >= 50 && textResultTmpArr.length >= 2 && textResultTmpArr.length <= 3) {
+            //if (ocrResult.getMeanConfidence() >= 50 ) {
+                Toast.makeText(this,"test"+ MRZCheckUtil.getMRZString(result), Toast.LENGTH_SHORT).show();
+                //onShutterButtonPressContinuous();
                 try {
+                    MRZInfo mrzInfo1 = new MRZInfo(MRZCheckUtil.getMRZString(result));
+                    Toast.makeText(this,"MRZ_Test DateOfExpiry: "+ mrzInfo1.getDateOfExpiry(), Toast.LENGTH_SHORT).show();
                     if (MRZCheckUtil.check(result)) {
+                        Toast.makeText(this,"OOOOOOOHHHH: "+ result, Toast.LENGTH_SHORT).show();
                         MRZInfo mrzInfo = new MRZInfo(result);
                         Toast.makeText(this, mrzInfo.toString().trim(), Toast.LENGTH_LONG).show();
                         Intent returnIntent = new Intent();
